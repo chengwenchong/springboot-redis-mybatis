@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cheng.test.service.TestService">
+	<!-- 开启基于redis的二级缓存 -->
+    <cache type="com.cheng.test.util.RedisCache"/>
+	<select id="getUserById" resultType="TestUser">
+		select id,name loginName,password from user_t where id=#{id}
+	</select>
+	
+	
+	<!-- <cache type="com.wooyoo.learning.util.RedisCache"/>表示开启基于redis的二级缓存，
+	并且在update语句中，我们设置flushCache为true，这样在更新product信息时，能够自动失效缓存
+	（本质上调用的是clear方法）。 -->
+	<update id="update" parameterType="TestUser" flushCache="true">
+        UPDATE user_t SET name = #{loginName}, password = #{password} WHERE id = #{id} LIMIT 1
+    </update>
+</mapper>

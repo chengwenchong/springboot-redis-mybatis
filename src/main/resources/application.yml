@@ -1,0 +1,83 @@
+multipart:
+    max-file-size: 5120Mb
+    max-request-size: 5120Mb
+
+server:
+    port: 5005
+
+spring:
+    thymeleaf:
+        cache: false
+        cache-period: 0
+    template:
+        cache: false
+    mvc:
+        favicon:
+            enabled: false
+
+    jackson:
+        date-format: yyyy-MM-dd HH:mm:ss # Date format string or a fully-qualified date format class name. For instance `yyyy-MM-dd HH:mm:ss`.  
+        joda-date-time-format: yyyy-MM-dd HH:mm:ss # Joda date time format string. If not configured, "date-format" will be used as a fallback if it is configured with a format string.  
+        locale: zh_CN # Locale used for formatting.  
+        time-zone: GMT+8 # Tim  
+    
+    datasource:
+      url: jdbc:mysql://127.0.0.1/spring?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+      maxActive: 1000
+      initialSize: 10
+      maxWait: 60000
+      minIdle: 5
+      test-on-borrow: true 
+      test-on-return: true
+      validation-query: SELECT 1
+      
+    redis:
+      # redis数据库索引（默认为0），我们使用索引为3的数据库，避免和其他数据库冲突
+      database: 3
+      # redis服务器地址（默认为localhost）
+      host: 192.168.1.154
+      # redis端口（默认为6379）
+      port: 6379
+      # redis访问密码（默认为空）
+      password: chengwenchong
+      # redis连接超时时间（单位为毫秒）
+      timeout: 0
+      # redis连接池配置
+      pool:
+        # 最大可用连接数（默认为8，负数表示无限）
+        max-active: 8
+        # 最大空闲连接数（默认为8，负数表示无限）
+        max-idle: 8
+        # 最小空闲连接数（默认为0，该值只有为正数才有作用）
+        min-idle: 0
+        # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）
+        max-wait: -1 
+      
+logging:
+    level:
+        com.cheng.test: DEBUG
+    file: logs/springboot-redis-mybatis.log
+
+#rest service configurations(TimeUnit: SECONDS)
+connection-timeout: 10
+read-timeout: 300
+write-timeout: 10
+
+mybatis: 
+    mapperLocations: classpath:/com/cheng/mappers/*.xml
+    typeAliasesPackage: com.cheng.test.domain
+    
+---
+spring:  
+    profiles: test
+    # 数据库配置
+    datasource: 
+      url: jdbc:h2:mem:test
+      username: root
+      password: 123456
+      driver-class-name: org.h2.Driver
+      schema: classpath:schema.sql
+      data: classpath:data.sql
